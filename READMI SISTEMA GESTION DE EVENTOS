@@ -1,0 +1,109 @@
+README FINAL ACTUALIZADO DEL PROYECTO
+Descripción del Sistema
+Sistema para gestionar eventos como conciertos y conferencias.
+Permite la venta y cancelación de boletas digitales, gestión de
+localidades con control de aforo, registro de asistentes,
+patrocinadores y distintos métodos de pago (efectivo y tarjeta).
+Incluye un servicio de ventas centralizado con generación de reportes.
+ Integrantes
+Nombre:Estefanía Zabala Cruz
+correo:zabalaestefania2007@gmail.com
+nombre:Laura Isabella Rodríguez Bermeo
+correo:lirodriguez-2025a@corhuila.edu.co
+Estructura del Proyecto
+src/
+└── com/
+└── eventos/
+├── model/
+│   ├── Evento.java          (Clase abstracta)
+│   ├── Concierto.java
+│   ├── Conferencia.java
+│   ├── Lugar.java
+│   ├── Localidad.java
+│   ├── Boleta.java
+│   ├── Asistente.java
+│   └── Patrocinador.java
+├── service/
+│   └── VentaService.java
+├── payment/
+│   ├── IPago.java
+│   ├── PagoEfectivo.java
+│   └── PagoTarjeta.java
+└── Main.java
+🔗 Explicación de Relaciones
+Herencia (──▷)
+
+Concierto y Conferencia heredan de Evento (clase abstracta).
+Justificación: Los dos son tipos específicos de evento que comparten
+atributos comunes (id, nombre, fecha, lugar) pero difieren en sus
+atributos propios.
+
+Composición (◆───)
+
+Evento contiene un Lugar.
+
+Multiplicidad: 1 Evento → 1 Lugar
+
+
+Boleta contiene una Localidad.
+
+Multiplicidad: 1 Boleta → 1 Localidad
+
+
+VentaService contiene una lista de Boleta.
+
+Multiplicidad: 1 VentaService → 0..* Boletas
+
+
+Justificación: Una boleta sin localidad o un evento sin lugar no
+tienen sentido dentro del dominio del sistema.
+
+Asociación (─────)
+
+Asistente se asocia con Boleta.
+
+Multiplicidad: 1 Asistente → 0..* Boletas
+
+
+Evento se asocia con Localidad.
+
+Multiplicidad: 1 Evento → 1..* Localidades
+
+
+Lugar se asocia con Patrocinador.
+
+Multiplicidad: 1 Lugar → 0..* Patrocinadores
+
+
+Justificación: Estas entidades pueden existir de forma independiente
+pero se relacionan dentro del sistema.
+
+Implementación de Interfaces (- - -▷)
+
+Concierto y Conferencia implementan Programable.
+Lugar implementa Patrocinado.
+Boleta implementa Vendible.
+PagoEfectivo y PagoTarjeta implementan IPago.
+Justificación: Las interfaces definen contratos de comportamiento
+desacoplados de la jerarquía de clases, aplicando el principio de
+inversión de dependencias en VentaService.
+
+CLASES IMPLEMENTADAS
+
+| Clase | Tipo | Atributos | Descripción |
+|-------|------|-----------|-------------|
+| Evento | Abstracta | id, nombre, fecha, lugar | Clase padre de todos los los eventos |
+| Concierto | Concreta | artista, genero | Evento de tipo concierto musical |
+| Conferencia | Concreta | tema, ponente | Evento de tipo conferencia académica |
+| Lugar | Concreta | nombre, ciudad, capacidad | Lugar donde se realiza el evento |
+| Localidad | Concreta | nombre, precio, cupos, cuposOcupados | Sección del lugar con control de aforo |
+| Boleta | Concreta | codigo, precio, estado, localidad | Boleta de acceso a un evento |
+| Asistente | Concreta | nombre, id, email | Persona que asiste al evento |
+| Patrocinador | Concreta | nombre, empresa, monto | Entidad que patrocina un evento |
+| VentaService | Concreta | pago, boletas | Servicio central de venta de boletas |
+| IPago | Interface | — | Contrato para métodos de pago |
+| PagoEfectivo | Concreta | referencia, cajero | Implementación de pago en efectivo |
+| PagoTarjeta | Concreta | numeroTarjeta, token | Implementación de pago con tarjeta |
+| Programable | Interface | — | Contrato para eventos programables |
+| Patrocinado | Interface | — | Contrato para entidades patrocinadas |
+| Vendible | Interface | — | Contrato para elementos vendibles |
